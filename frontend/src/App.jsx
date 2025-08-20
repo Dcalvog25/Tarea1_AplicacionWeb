@@ -311,18 +311,47 @@ function App() {
               <h2 className="results-title">🏆 Resultados Finales</h2>
               
               <div className="winner-announcement">
-                {gameState.winner === 'Empate' ? (
+                {gameState.isRealTie ? (
+                  <p className="tie-message">¡Empate Perfecto! 🤝</p>
+                ) : gameState.winner === 'Empate' ? (
                   <p className="tie-message">¡Es un empate! 🤝</p>
                 ) : (
                   <p className="winner-message">¡Ganador: <strong>{gameState.winner}</strong>! 🎉</p>
                 )}
               </div>
 
-              <div className="final-scores">
-                <h3>Puntuaciones Finales:</h3>
-                {Object.entries(gameState.finalScores).map(([player, score]) => (
-                  <div key={player} className="score-item">
-                    <span>{player}: {score} intentos totales</span>
+              {/* Resumen Completo en un Solo Recuadro */}
+              <div className="game-summary">
+                <h3>📊 Resumen de la Partida</h3>
+                
+                {gameState.playersSummary && gameState.playersSummary.map((player, index) => (
+                  <div key={index} className={`player-summary ${gameState.winner === player.name ? 'winner-summary' : ''}`}>
+                    <div className="player-name-section">
+                      <h4>{player.name} {gameState.winner === player.name ? '👑' : ''}</h4>
+                    </div>
+                    
+                    <div className="player-details">
+                      <div className="summary-stat">
+                        <span className="stat-label">Total de intentos:</span>
+                        <span className="stat-value">{player.totalAttempts}</span>
+                      </div>
+                      <div className="summary-stat">
+                        <span className="stat-label">Tiempo total:</span>
+                        <span className="stat-value">{player.totalTimeFormatted}</span>
+                      </div>
+                    </div>
+
+                    {/* Intentos por Ronda */}
+                    <div className="rounds-breakdown">
+                      <span className="breakdown-title">Intentos por ronda:</span>
+                      <div className="rounds-list">
+                        {player.roundsPlayed && player.roundsPlayed.map((round, roundIndex) => (
+                          <span key={roundIndex} className="round-attempt">
+                            R{round.round}: {round.attempts}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>

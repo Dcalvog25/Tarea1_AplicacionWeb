@@ -1,0 +1,140 @@
+[
+  {
+    "id": 1755662930994,
+    "date": "2025-08-20T04:08:50.994Z",
+    "dateFormatted": "19/8/2025, 22:08:50",
+    "winner": "hola12",
+    "isRealTie": false,
+    "totalGameTime": 34951,
+    "totalGameTimeFormatted": "34s",
+    "playersSummary": [
+      {
+        "name": "hola12",
+        "totalAttempts": 3,
+        "totalTime": 14535,
+        "totalTimeFormatted": "14s",
+        "averageAttemptsPerRound": "1.0",
+        "averageTimePerRound": "4s",
+        "roundsPlayed": [
+          {
+            "round": 1,
+            "attempts": 1,
+            "time": 6593
+          },
+          {
+            "round": 3,
+            "attempts": 1,
+            "time": 3662
+          },
+          {
+            "round": 5,
+            "attempts": 1,
+            "time": 4280
+          }
+        ]
+      },
+      {
+        "name": "hola13",
+        "totalAttempts": 3,
+        "totalTime": 20415,
+        "totalTimeFormatted": "20s",
+        "averageAttemptsPerRound": "1.0",
+        "averageTimePerRound": "6s",
+        "roundsPlayed": [
+          {
+            "round": 2,
+            "attempts": 1,
+            "time": 8086
+          },
+          {
+            "round": 4,
+            "attempts": 1,
+            "time": 8350
+          },
+          {
+            "round": 6,
+            "attempts": 1,
+            "time": 3979
+          }
+        ]
+      }
+    ],
+    "finalScores": {
+      "hola12": 3,
+      "hola13": 3
+    },
+    "finalTimes": {
+      "hola12": "14s",
+      "hola13": "20s"
+    }
+  },
+  {
+    "id": 1755662869653,
+    "date": "2025-08-20T04:07:49.653Z",
+    "dateFormatted": "19/8/2025, 22:07:49",
+    "winner": "DAVID",
+    "isRealTie": false,
+    "totalGameTime": 83370,
+    "totalGameTimeFormatted": "1m 23s",
+    "playersSummary": [
+      {
+        "name": "DAVID",
+        "totalAttempts": 11,
+        "totalTime": 32967,
+        "totalTimeFormatted": "32s",
+        "averageAttemptsPerRound": "3.7",
+        "averageTimePerRound": "10s",
+        "roundsPlayed": [
+          {
+            "round": 1,
+            "attempts": 9,
+            "time": 20594
+          },
+          {
+            "round": 3,
+            "attempts": 1,
+            "time": 7241
+          },
+          {
+            "round": 5,
+            "attempts": 1,
+            "time": 5132
+          }
+        ]
+      },
+      {
+        "name": "JOHNSY",
+        "totalAttempts": 11,
+        "totalTime": 50400,
+        "totalTimeFormatted": "50s",
+        "averageAttemptsPerRound": "3.7",
+        "averageTimePerRound": "16s",
+        "roundsPlayed": [
+          {
+            "round": 2,
+            "attempts": 9,
+            "time": 37403
+          },
+          {
+            "round": 4,
+            "attempts": 1,
+            "time": 7769
+          },
+          {
+            "round": 6,
+            "attempts": 1,
+            "time": 5228
+          }
+        ]
+      }
+    ],
+    "finalScores": {
+      "DAVID": 11,
+      "JOHNSY": 11
+    },
+    "finalTimes": {
+      "DAVID": "32s",
+      "JOHNSY": "50s"
+    }
+  }
+]

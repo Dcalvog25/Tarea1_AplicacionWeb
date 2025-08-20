@@ -12,6 +12,10 @@ function App() {
   const [currentGuess, setCurrentGuess] = useState("");
   const [gameResult, setGameResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Estados del historial
+  const [showHistory, setShowHistory] = useState(false);
+  const [gameHistory, setGameHistory] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/mensaje")
@@ -107,6 +111,7 @@ function App() {
     setGameState(null);
     setCurrentGuess("");
     setGameResult("");
+    setShowHistory(false);
   };
 
   const handleNewGame = async () => {
@@ -116,14 +121,29 @@ function App() {
       setCurrentGuess("");
       setGameResult("");
       setShowPlayerForm(true);
+      setShowHistory(false);
     } catch (error) {
       console.log("Error al reiniciar");
     }
   };
 
-  const handleHistory = () => {
-    console.log("Ver historial");
-    // Aquí puedes agregar la lógica para ver el historial
+  const handleHistory = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("http://localhost:5000/api/game/history");
+      const data = await response.json();
+      
+      if (response.ok) {
+        setGameHistory(data.history || []);
+        setShowHistory(true);
+      } else {
+        alert("Error al cargar el historial");
+      }
+    } catch (error) {
+      alert("Error de conexión al cargar el historial");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Debug: mostrar estados actuales
@@ -146,19 +166,20 @@ function App() {
       <div className="content-wrapper">
         <header className="header">
           <h1 className="game-title">
-            <span className="title-glow">GAME</span>
-            <span className="title-accent">ZONE</span>
+            <span className="title-glow">BATALLA</span>
+            <span className="title-accent">DE NÚMEROS</span>
           </h1>
           <p className="subtitle">
-            {!gameState && !showPlayerForm && "Bienvenido a la experiencia de juego definitiva"}
+            {!gameState && !showPlayerForm && !showHistory && "Bienvenido al juego de batalla de numeros"}
             {showPlayerForm && "Configura tu partida"}
+            {showHistory && "Historial de Partidas"}
             {gameState && gameState.status === 'playing' && `Ronda ${gameState.currentRound} - Turno de ${gameState.activePlayerName}`}
             {gameState && gameState.status === 'finished' && "¡Partida Terminada!"}
           </p>
         </header>
 
         {/* Menú Principal */}
-        {!showPlayerForm && !gameState && (
+        {!showPlayerForm && !gameState && !showHistory && (
           <div className="main-menu">
             <button 
               className="menu-button play-button"
@@ -224,6 +245,104 @@ function App() {
                 >
                   <span className="button-icon">🚀</span>
                   <span className="button-text">{isLoading ? "INICIANDO..." : "COMENZAR"}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Pantalla de Historial */}
+        {showHistory && (
+          <div className="history-screen">
+            <div className="history-container">
+              <h2 className="history-title">📊 Historial de Partidas</h2>
+              
+              {gameHistory.length === 0 ? (
+                <div className="no-history">
+                  <p>No hay partidas registradas aún.</p>
+                  <p>¡Juega tu primera partida para ver el historial!</p>
+                </div>
+              ) : (
+                <div className="history-list">
+                  <div className="history-stats">
+                    <p>Total de partidas jugadas: <strong>{gameHistory.length}</strong></p>
+                  </div>
+                  
+                  {gameHistory.map((game) => (
+                    <div key={game.id} className="history-item">
+                      <div className="history-header">
+                        <div className="game-date">
+                          <span className="date-label">Fecha:</span>
+                          <span className="date-value">{game.dateFormatted}</span>
+                        </div>
+                        <div className="game-duration">
+                          <span className="duration-label">Duración total:</span>
+                          <span className="duration-value">{game.totalGameTimeFormatted}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="game-result">
+                        {game.isRealTie ? (
+                          <div className="result-tie">🤝 Empate Perfecto</div>
+                        ) : game.winner === 'Empate' ? (
+                          <div className="result-tie">🤝 Empate</div>
+                        ) : (
+                          <div className="result-winner">🏆 Ganador: <strong>{game.winner}</strong></div>
+                        )}
+                      </div>
+                      
+                      <div className="players-summary-hist">
+                        {game.playersSummary && game.playersSummary.map((player, index) => (
+                          <div key={index} className={`player-hist-card ${game.winner === player.name ? 'winner-hist' : ''}`}>
+                            <div className="player-hist-name">
+                              {player.name} {game.winner === player.name ? '👑' : ''}
+                            </div>
+                            <div className="player-hist-stats">
+                              <div className="hist-stat">
+                                <span className="hist-stat-label">Intentos:</span>
+                                <span className="hist-stat-value">{player.totalAttempts}</span>
+                              </div>
+                              <div className="hist-stat">
+                                <span className="hist-stat-label">Tiempo:</span>
+                                <span className="hist-stat-value">{player.totalTimeFormatted}</span>
+                              </div>
+                            </div>
+                            <div className="rounds-hist">
+                              <span className="rounds-hist-label">Por ronda:</span>
+                              <div className="rounds-hist-list">
+                                {player.roundsPlayed && player.roundsPlayed.map((round, roundIndex) => (
+                                  <span key={roundIndex} className="round-hist-item">
+                                    R{round.round}: {round.attempts}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+              
+              <div className="history-buttons">
+                <button 
+                  className="menu-button back-button"
+                  onClick={handleBackToMenu}
+                >
+                  <span className="button-icon">🏠</span>
+                  <span className="button-text">MENÚ PRINCIPAL</span>
+                </button>
+                
+                <button 
+                  className="menu-button play-button"
+                  onClick={() => {
+                    setShowHistory(false);
+                    setShowPlayerForm(true);
+                  }}
+                >
+                  <span className="button-icon">🎮</span>
+                  <span className="button-text">NUEVA PARTIDA</span>
                 </button>
               </div>
             </div>

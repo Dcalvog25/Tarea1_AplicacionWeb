@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
 const app = express();
 const PORT = 5000;
 
@@ -8,6 +10,55 @@ app.use(express.json());
 
 // Estado del juego en memoria (en producción usarías una base de datos)
 let gameState = null;
+
+// Archivo para guardar el historial
+const HISTORY_FILE = path.join(__dirname, 'game_history.json');
+
+// Función para leer el historial
+function readHistory() {
+  try {
+    if (fs.existsSync(HISTORY_FILE)) {
+      const data = fs.readFileSync(HISTORY_FILE, 'utf8');
+      return JSON.parse(data);
+    }
+    return [];
+  } catch (error) {
+    console.error('Error al leer historial:', error);
+    return [];
+  }
+}
+
+// Función para guardar una partida en el historial
+function saveGameToHistory(gameData) {
+  try {
+    const history = readHistory();
+    const gameRecord = {
+      id: Date.now(),
+      date: new Date().toISOString(),
+      dateFormatted: new Date().toLocaleString('es-ES'),
+      players: gameData.players,
+      winner: gameData.winner,
+      isRealTie: gameData.isRealTie || false,
+      totalGameTime: gameData.totalGameTime,
+      totalGameTimeFormatted: formatTime(gameData.totalGameTime),
+      playersSummary: gameData.playersSummary,
+      finalScores: gameData.finalScores,
+      finalTimes: gameData.finalTimes
+    };
+    
+    history.unshift(gameRecord); // Agregar al inicio (más recientes primero)
+    
+    // Mantener solo los últimos 50 juegos
+    if (history.length > 50) {
+      history.splice(50);
+    }
+    
+    fs.writeFileSync(HISTORY_FILE, JSON.stringify(history, null, 2));
+    console.log('🗃️ Partida guardada en historial');
+  } catch (error) {
+    console.error('Error al guardar historial:', error);
+  }
+}
 
 // Función para formatear tiempo en formato legible
 function formatTime(milliseconds) {
@@ -203,6 +254,9 @@ app.post("/api/game/guess", (req, res) => {
 
       console.log("🏁 Juego terminado:", finalResult);
       
+      // Guardar la partida en el historial
+      saveGameToHistory(finalResult);
+      
       return res.json({
         result,
         roundComplete: true,
@@ -260,6 +314,32 @@ app.get("/api/game/status", (req, res) => {
       gameHistory: gameState.gameHistory
     }
   });
+});
+
+// Obtener historial de partidas
+app.get("/api/game/history", (req, res) => {
+  try {
+    const history = readHistory();
+    res.json({
+      success: true,
+      history: history,
+      totalGames: history.length
+    });
+  } catch (error) {
+    console.error('Error al obtener historial:', error);
+    res.status(500).json({ error: "Error al obtener el historial" });
+  }
+});
+
+// Limpiar historial (opcional para desarrollo)
+app.delete("/api/game/history", (req, res) => {
+  try {
+    fs.writeFileSync(HISTORY_FILE, JSON.stringify([], null, 2));
+    res.json({ success: true, message: "Historial limpiado" });
+  } catch (error) {
+    console.error('Error al limpiar historial:', error);
+    res.status(500).json({ error: "Error al limpiar el historial" });
+  }
 });
 
 // Reiniciar juego

@@ -1,5 +1,58 @@
 [
   {
+    "id": 1755888636982,
+    "date": "2025-08-22T18:50:36.981Z",
+    "dateFormatted": "22/8/2025, 12:50:36",
+    "players": [
+      "d",
+      "a"
+    ],
+    "winner": "a",
+    "isRealTie": false,
+    "totalGameTime": 99028,
+    "totalGameTimeFormatted": "1m 39s",
+    "playersSummary": [
+      {
+        "name": "d",
+        "totalAttempts": 22,
+        "totalTimeFormatted": "54s",
+        "roundsPlayed": [
+          {
+            "round": 1,
+            "attempts": 9
+          },
+          {
+            "round": 3,
+            "attempts": 3
+          },
+          {
+            "round": 5,
+            "attempts": 10
+          }
+        ]
+      },
+      {
+        "name": "a",
+        "totalAttempts": 17,
+        "totalTimeFormatted": "44s",
+        "roundsPlayed": [
+          {
+            "round": 2,
+            "attempts": 5
+          },
+          {
+            "round": 4,
+            "attempts": 4
+          },
+          {
+            "round": 6,
+            "attempts": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 1755884704506,
     "date": "2025-08-22T17:45:04.506Z",
     "dateFormatted": "22/8/2025, 11:45:04",
@@ -66,73 +119,6 @@
     "finalTimes": {
       "David": "44s",
       "Angelo": "36s"
-    }
-  },
-  {
-    "id": 1755884560554,
-    "date": "2025-08-22T17:42:40.554Z",
-    "dateFormatted": "22/8/2025, 11:42:40",
-    "winner": "d",
-    "isRealTie": false,
-    "totalGameTime": 122497,
-    "totalGameTimeFormatted": "2m 2s",
-    "playersSummary": [
-      {
-        "name": "d",
-        "totalAttempts": 23,
-        "totalTime": 50456,
-        "totalTimeFormatted": "50s",
-        "averageAttemptsPerRound": "7.7",
-        "averageTimePerRound": "16s",
-        "roundsPlayed": [
-          {
-            "round": 1,
-            "attempts": 9,
-            "time": 19915
-          },
-          {
-            "round": 3,
-            "attempts": 7,
-            "time": 16562
-          },
-          {
-            "round": 5,
-            "attempts": 7,
-            "time": 13979
-          }
-        ]
-      },
-      {
-        "name": "d",
-        "totalAttempts": 19,
-        "totalTime": 72038,
-        "totalTimeFormatted": "1m 12s",
-        "averageAttemptsPerRound": "6.3",
-        "averageTimePerRound": "24s",
-        "roundsPlayed": [
-          {
-            "round": 2,
-            "attempts": 7,
-            "time": 13749
-          },
-          {
-            "round": 4,
-            "attempts": 6,
-            "time": 13615
-          },
-          {
-            "round": 6,
-            "attempts": 6,
-            "time": 44674
-          }
-        ]
-      }
-    ],
-    "finalScores": {
-      "d": 19
-    },
-    "finalTimes": {
-      "d": "1m 12s"
     }
   },
   {

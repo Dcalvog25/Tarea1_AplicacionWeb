@@ -103,8 +103,8 @@ app.post("/api/game/start", (req, res) => {
     intentosDeLaRonda: [],
     totalIntentos: [0, 0],
     totalTiempo: [0, 0],
-    empeceLaRonda: Date.now(),
-    empeceLaPartida: Date.now(),
+    empezeLaRonda: Date.now(),
+    empezeLaPartida: Date.now(),
     todasLasRondas: []
   };
 
@@ -139,7 +139,7 @@ app.post("/api/game/guess", (req, res) => {
   const miIntento = parseInt(guess);
   
   // Validar número
-  if (isNaN(miIntento) || miIntento < 1 || miIntento > 100) {s
+  if (isNaN(miIntento) || miIntento < 1 || miIntento > 100) {
     return res.status(400).json({ error: "Número debe ser entre 1 y 100" });
   }
 
@@ -166,8 +166,8 @@ app.post("/api/game/guess", (req, res) => {
 
   // Si terminó la ronda
   if (rondaCompleta) {
-    const cuantoTardo = Date.now() - juegoActual.empeceLaRonda;
-
+    const cuantoTardo = Date.now() - juegoActual.empezeLaRonda;
+    
     // Sumar estadísticas
     juegoActual.totalIntentos[juegoActual.turno] += juegoActual.intentosDeLaRonda.length;
     juegoActual.totalTiempo[juegoActual.turno] += cuantoTardo;
@@ -229,7 +229,7 @@ app.post("/api/game/guess", (req, res) => {
         nombresJugadores: juegoActual.nombres,
         quienGano: ganador,
         esEmpateTotal: empateCompleto,
-        tiempoCompleto: Date.now() - juegoActual.empeceLaPartida,
+        tiempoCompleto: Date.now() - juegoActual.empezeLaPartida,
         resumen: resumenFinal
       };
       
@@ -243,7 +243,7 @@ app.post("/api/game/guess", (req, res) => {
         isRealTie: empateCompleto,
         playersSummary: resumenFinal,
         finalScores: juegoActual.totalIntentos,
-        totalGameTime: Date.now() - juegoActual.empeceLaPartida
+        totalGameTime: Date.now() - juegoActual.empezeLaPartida
       };
       
       juegoActual = null; // Borrar juego
@@ -258,8 +258,8 @@ app.post("/api/game/guess", (req, res) => {
       juegoActual.ronda++;
       juegoActual.turno = 1 - juegoActual.turno; // Cambiar turno
       juegoActual.numero = crearNumero();
-      juegoActual.empeceLaRonda = Date.now();
-
+      juegoActual.empezeLaRonda = Date.now();
+      
       console.log(`🔄 Ronda ${juegoActual.ronda}`);
       console.log(`👤 Turno: ${juegoActual.nombres[juegoActual.turno]}`);
       console.log(`🎯 Nuevo número: ${juegoActual.numero}`);
@@ -286,12 +286,6 @@ app.post("/api/game/guess", (req, res) => {
 
 // Obtener historial
 app.get("/api/history", (req, res) => {
-  const historial = obtenerHistorial();
-  res.json({ history: historial });
-});
-
-// Obtener historial (ruta alternativa que usa el frontend)
-app.get("/api/game/history", (req, res) => {
   const historial = obtenerHistorial();
   res.json({ history: historial });
 });

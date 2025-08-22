@@ -1,9 +1,19 @@
+/**
+ * Componente para mostrar los resultados finales de la partida
+ * Presentar de manera clara y atractiva quién ganó y las estadísticas completas
+ * Los jugadores necesitan ver un resumen detallado de su desempeño al final del juego
+ */
 function FinalResults({ gameState, onNewGame, onBackToMenu }) {
   return (
     <div className="final-results">
       <div className="results-container">
         <h2 className="results-title">🏆 Resultados Finales</h2>
         
+        {/* 
+          ANUNCIO DEL GANADOR
+          Destacar claramente el resultado principal del juego
+          Es lo primero que los jugadores quieren saber al terminar
+        */}
         <div className="winner-announcement">
           {gameState.isRealTie ? (
             <p className="tie-message">¡Empate Perfecto! 🤝</p>
@@ -14,7 +24,11 @@ function FinalResults({ gameState, onNewGame, onBackToMenu }) {
           )}
         </div>
 
-        {/* Resumen Completo en un Solo Recuadro */}
+        {/* 
+          RESUMEN ESTADÍSTICO COMPLETO
+          Mostrar el rendimiento detallado de cada jugador
+          Permite analizar el desempeño y entender por qué ganó quien ganó
+        */}
         <div className="game-summary">
           <h3>📊 Resumen de la Partida</h3>
           

@@ -13,12 +13,20 @@ app.use(express.json());
 // Variables para el juego actual
 let juegoActual = null;
 
-// Función para número aleatorio
+/**
+ * Genera un número aleatorio entre 1 y 100
+ * Crear el número objetivo que los jugadores deben adivinar en cada ronda
+ * Cada ronda necesita un nuevo desafío aleatorio
+ */
 function crearNumero() {
   return Math.floor(Math.random() * 100) + 1;
 }
 
-// Función para tiempo en formato simple
+/**
+ * Convierte milisegundos a formato legible (minutos y segundos)
+ * Mostrar el tiempo transcurrido de forma comprensible para el usuario
+ * Los usuarios entienden mejor "2m 30s" que "150000ms" al ver sus estadísticas
+ */
 function formatearTiempo(ms) {
   const seg = Math.floor(ms / 1000);
   const min = Math.floor(seg / 60);
@@ -30,7 +38,11 @@ function formatearTiempo(ms) {
   return seg + "s";
 }
 
-// Leer historial de archivo
+/**
+ * Lee el historial de partidas desde el archivo JSON
+ * Recuperar las partidas anteriores para mostrar estadísticas históricas
+ * Los jugadores quieren ver su progreso y comparar partidas anteriores
+ */
 function obtenerHistorial() {
   try {
     if (fs.existsSync("game_history.json")) {
@@ -44,7 +56,11 @@ function obtenerHistorial() {
   }
 }
 
-// Guardar partida terminada
+/**
+ * Guarda una partida completada en el historial persistente
+ * Mantener un registro permanente de todas las partidas jugadas
+ * Permite análisis posterior, estadísticas y seguimiento del rendimiento de los jugadores
+ */
 function guardarEnHistorial(datos) {
   try {
     const historial = obtenerHistorial();
@@ -81,7 +97,11 @@ app.get("/api/mensaje", (req, res) => {
   res.json({ mensaje: "Hola desde el backend con Express 😎" });
 });
 
-// Empezar nueva partida
+/**
+ * Inicia una nueva partida entre dos jugadores
+ * Configurar el estado inicial del juego con jugadores y primer número
+ * Necesitamos inicializar todas las variables del juego y determinar quién comienza
+ */
 app.post("/api/game/start", (req, res) => {
   const { player1, player2 } = req.body;
   
@@ -90,7 +110,7 @@ app.post("/api/game/start", (req, res) => {
     return res.status(400).json({ error: "Necesito los dos nombres" });
   }
 
-  // Quien empieza (aleatorio)
+  // Quien empieza (aleatorio) - RAZÓN: Equidad en el juego, nadie tiene ventaja
   const primerJugador = Math.random() < 0.5 ? 0 : 1;
   const nombres = [player1, player2];
   
@@ -127,7 +147,11 @@ app.post("/api/game/start", (req, res) => {
   res.json({ gameState: estadoInicial });
 });
 
-// Procesar intento de adivinar
+/**
+ * Procesa cada intento de adivinanza de los jugadores
+ * Evaluar si el número es correcto y gestionar el flujo del juego
+ * Es el corazón del juego - determina pistas, cambios de turno y finalización de rondas
+ */
 app.post("/api/game/guess", (req, res) => {
   const { guess } = req.body;
   
@@ -143,7 +167,7 @@ app.post("/api/game/guess", (req, res) => {
     return res.status(400).json({ error: "Número debe ser entre 1 y 100" });
   }
 
-  // Agregar intento
+  // Agregar intento al registro de la ronda actual
   juegoActual.intentosDeLaRonda.push({
     number: miIntento,
     player: juegoActual.nombres[juegoActual.turno]
@@ -152,7 +176,7 @@ app.post("/api/game/guess", (req, res) => {
   let respuesta;
   let rondaCompleta = false;
 
-  // Ver si acertó
+  // Evaluar el intento y proporcionar retroalimentación
   if (miIntento === juegoActual.numero) {
     respuesta = "¡Correcto! 🎉";
     rondaCompleta = true;
@@ -164,15 +188,15 @@ app.post("/api/game/guess", (req, res) => {
 
   console.log(`🎯 ${miIntento} vs ${juegoActual.numero} → ${respuesta}`);
 
-  // Si terminó la ronda
+  // Procesar finalización de ronda y cálculo de estadísticas
   if (rondaCompleta) {
     const cuantoTardo = Date.now() - juegoActual.empeceLaRonda;
 
-    // Sumar estadísticas
+    // Acumular estadísticas del jugador actual
     juegoActual.totalIntentos[juegoActual.turno] += juegoActual.intentosDeLaRonda.length;
     juegoActual.totalTiempo[juegoActual.turno] += cuantoTardo;
     
-    // Guardar info de esta ronda
+    // Guardar información detallada de esta ronda para el historial
     const infoRonda = {
       ronda: juegoActual.ronda,
       jugador: juegoActual.nombres[juegoActual.turno],
@@ -186,19 +210,21 @@ app.post("/api/game/guess", (req, res) => {
     // Limpiar intentos de la ronda
     juegoActual.intentosDeLaRonda = [];
     
-    // Ver si terminó el juego (6 rondas)
+    // Verificar si el juego completo ha terminado (6 rondas)
     if (juegoActual.ronda >= 6) {
-      // Calcular quien ganó
+      // ALGORITMO DE DETERMINACIÓN DE GANADOR
+      // Evaluar quién ganó basado en criterios justos y objetivos
+      // Necesitamos reglas claras de desempate para determinar el ganador
       let ganador;
       let empateCompleto = false;
       
-      // Primero por intentos
+      // Primero comparar por número total de intentos (menos intentos = mejor)
       if (juegoActual.totalIntentos[0] < juegoActual.totalIntentos[1]) {
         ganador = juegoActual.nombres[0];
       } else if (juegoActual.totalIntentos[1] < juegoActual.totalIntentos[0]) {
         ganador = juegoActual.nombres[1];
       } else {
-        // Empate en intentos, ver tiempo
+        // En caso de empate en intentos, desempatar por tiempo (menos tiempo = mejor)
         if (juegoActual.totalTiempo[0] < juegoActual.totalTiempo[1]) {
           ganador = juegoActual.nombres[0];
         } else if (juegoActual.totalTiempo[1] < juegoActual.totalTiempo[0]) {

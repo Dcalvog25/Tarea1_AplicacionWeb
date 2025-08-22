@@ -22,6 +22,11 @@ function App() {
   const [showHistory, setShowHistory] = useState(false);
   const [gameHistory, setGameHistory] = useState([]);
 
+  /**
+   * Verificar conexión con el backend al cargar la aplicación
+   * Confirmar que el servidor está disponible y mostrar estado de conexión
+   * Los usuarios necesitan saber si pueden jugar o si hay problemas de conectividad
+   */
   useEffect(() => {
     fetch("http://localhost:5000/api/mensaje")
       .then((res) => res.json())
@@ -33,6 +38,11 @@ function App() {
     setShowPlayerForm(true);
   };
 
+  /**
+   * Inicia una nueva partida enviando los nombres al backend
+   * Comunicar al servidor los jugadores y recibir el estado inicial del juego
+   * El backend debe conocer quiénes juegan para gestionar turnos y estadísticas
+   */
   const handleStartGame = async () => {
     if (player1Name.trim() && player2Name.trim()) {
       setIsLoading(true);
@@ -68,6 +78,11 @@ function App() {
     }
   };
 
+  /**
+   * Procesa cada intento de adivinanza del jugador activo
+   * Enviar el número al backend y actualizar el estado según la respuesta
+   * Cada intento debe ser evaluado por el servidor para mantener la lógica del juego centralizada
+   */
   const handleGuess = async () => {
     if (!currentGuess.trim()) return;
     
@@ -93,10 +108,10 @@ function App() {
         setCurrentGuess("");
         
         if (data.gameComplete) {
-          // Juego terminado
+          // Juego terminado - mostrar resultados finales
           setGameState({ ...data.finalResult, status: 'finished' });
         } else {
-          // Actualizar estado del juego
+          // Continuar con la siguiente jugada
           setGameState(data.gameState);
         }
       } else {
@@ -109,6 +124,11 @@ function App() {
     }
   };
 
+  /**
+   * Regresa al menú principal y limpia todos los estados
+   * Permitir navegación fluida entre pantallas sin residuos de estado
+   * Evita conflictos entre diferentes secciones de la aplicación
+   */
   const handleBackToMenu = () => {
     setShowPlayerForm(false);
     setPlayer1Name("");
@@ -119,6 +139,11 @@ function App() {
     setShowHistory(false);
   };
 
+  /**
+   * Reinicia el juego y prepara una nueva partida
+   * Permitir jugar múltiples partidas sin recargar la aplicación
+   * Mejora la experiencia del usuario al mantener fluidez en el juego
+   */
   const handleNewGame = async () => {
     try {
       await fetch("http://localhost:5000/api/game/reset", { method: "POST" });
@@ -132,6 +157,11 @@ function App() {
     }
   };
 
+  /**
+   * Carga y muestra el historial de partidas anteriores
+   * Permitir a los jugadores revisar su desempeño histórico
+   * Los jugadores quieren ver estadísticas y comparar sus mejoras
+   */
   const handleHistory = async () => {
     setIsLoading(true);
     try {

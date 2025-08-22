@@ -1,3 +1,8 @@
+/**
+ * Componente principal de la interfaz durante el juego activo
+ * Mostrar el estado actual del juego y permitir a los jugadores hacer intentos
+ * Centraliza toda la interacción durante las rondas de juego
+ */
 function GameInterface({ 
   gameState, 
   currentGuess, 
@@ -7,6 +12,11 @@ function GameInterface({
   gameResult, 
   isLoading 
 }) {
+  /**
+   * Procesa el intento del jugador actual
+   * Validar y enviar el número ingresado al componente padre
+   * Mantiene la lógica de validación cerca de la interfaz de entrada
+   */
   const handleGuess = () => {
     onGuess();
   };
@@ -15,6 +25,11 @@ function GameInterface({
     <div className="game-interface">
       <div className="game-container">
         <div className="game-info">
+          {/* 
+            PANEL DE INFORMACIÓN DE JUGADORES
+            Mostrar el estado actual de cada jugador y quién tiene el turno
+            Los jugadores necesitan ver claramente sus estadísticas y turno activo
+          */}
           <div className="players-info">
             <div className={`player-card ${gameState.activePlayer === 0 ? 'active' : ''}`}>
               <span className="player-name">{gameState.players[0]}</span>
@@ -26,6 +41,11 @@ function GameInterface({
             </div>
           </div>
           
+          {/* 
+            INDICADOR DE PROGRESO DE RONDA
+            Mostrar en qué ronda están del total de 6
+            Los jugadores necesitan saber cuánto falta para terminar el juego
+          */}
           <div className="round-info">
             <span>Ronda {gameState.currentRound} de 6</span>
           </div>

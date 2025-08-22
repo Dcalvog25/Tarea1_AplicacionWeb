@@ -1,3 +1,8 @@
+/**
+ * Componente para capturar los nombres de los jugadores
+ * Recopilar la información necesaria para inicializar una partida
+ * El juego necesita identificar a los jugadores para mostrar turnos y estadísticas
+ */
 function PlayerForm({ 
   player1Name, 
   player2Name, 
@@ -7,6 +12,11 @@ function PlayerForm({
   onStartGame, 
   isLoading 
 }) {
+  /**
+   * Valida los nombres y procede a iniciar el juego
+   * Asegurar que ambos jugadores tengan nombres válidos antes de comenzar
+   * Previene errores y garantiza una experiencia de juego clara
+   */
   const handleStartGame = () => {
     if (player1Name.trim() && player2Name.trim()) {
       onStartGame();

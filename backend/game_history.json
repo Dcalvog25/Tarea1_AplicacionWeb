@@ -1,5 +1,141 @@
 [
   {
+    "id": 1755884704506,
+    "date": "2025-08-22T17:45:04.506Z",
+    "dateFormatted": "22/8/2025, 11:45:04",
+    "winner": "Angelo",
+    "isRealTie": false,
+    "totalGameTime": 80703,
+    "totalGameTimeFormatted": "1m 20s",
+    "playersSummary": [
+      {
+        "name": "David",
+        "totalAttempts": 13,
+        "totalTime": 44378,
+        "totalTimeFormatted": "44s",
+        "averageAttemptsPerRound": "4.3",
+        "averageTimePerRound": "14s",
+        "roundsPlayed": [
+          {
+            "round": 1,
+            "attempts": 9,
+            "time": 23494
+          },
+          {
+            "round": 3,
+            "attempts": 3,
+            "time": 12263
+          },
+          {
+            "round": 5,
+            "attempts": 1,
+            "time": 8621
+          }
+        ]
+      },
+      {
+        "name": "Angelo",
+        "totalAttempts": 13,
+        "totalTime": 36325,
+        "totalTimeFormatted": "36s",
+        "averageAttemptsPerRound": "4.3",
+        "averageTimePerRound": "12s",
+        "roundsPlayed": [
+          {
+            "round": 2,
+            "attempts": 4,
+            "time": 10988
+          },
+          {
+            "round": 4,
+            "attempts": 8,
+            "time": 17135
+          },
+          {
+            "round": 6,
+            "attempts": 1,
+            "time": 8202
+          }
+        ]
+      }
+    ],
+    "finalScores": {
+      "David": 13,
+      "Angelo": 13
+    },
+    "finalTimes": {
+      "David": "44s",
+      "Angelo": "36s"
+    }
+  },
+  {
+    "id": 1755884560554,
+    "date": "2025-08-22T17:42:40.554Z",
+    "dateFormatted": "22/8/2025, 11:42:40",
+    "winner": "d",
+    "isRealTie": false,
+    "totalGameTime": 122497,
+    "totalGameTimeFormatted": "2m 2s",
+    "playersSummary": [
+      {
+        "name": "d",
+        "totalAttempts": 23,
+        "totalTime": 50456,
+        "totalTimeFormatted": "50s",
+        "averageAttemptsPerRound": "7.7",
+        "averageTimePerRound": "16s",
+        "roundsPlayed": [
+          {
+            "round": 1,
+            "attempts": 9,
+            "time": 19915
+          },
+          {
+            "round": 3,
+            "attempts": 7,
+            "time": 16562
+          },
+          {
+            "round": 5,
+            "attempts": 7,
+            "time": 13979
+          }
+        ]
+      },
+      {
+        "name": "d",
+        "totalAttempts": 19,
+        "totalTime": 72038,
+        "totalTimeFormatted": "1m 12s",
+        "averageAttemptsPerRound": "6.3",
+        "averageTimePerRound": "24s",
+        "roundsPlayed": [
+          {
+            "round": 2,
+            "attempts": 7,
+            "time": 13749
+          },
+          {
+            "round": 4,
+            "attempts": 6,
+            "time": 13615
+          },
+          {
+            "round": 6,
+            "attempts": 6,
+            "time": 44674
+          }
+        ]
+      }
+    ],
+    "finalScores": {
+      "d": 19
+    },
+    "finalTimes": {
+      "d": "1m 12s"
+    }
+  },
+  {
     "id": 1755662930994,
     "date": "2025-08-20T04:08:50.994Z",
     "dateFormatted": "19/8/2025, 22:08:50",

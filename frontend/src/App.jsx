@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
 import './App.css';
+import MainMenu from './components/MainMenu';
+import PlayerForm from './components/PlayerForm';
+import GameInterface from './components/GameInterface';
+import FinalResults from './components/FinalResults';
+import HistoryScreen from './components/HistoryScreen';
 
 function App() {
   const [mensaje, setMensaje] = useState("");
@@ -180,320 +185,57 @@ function App() {
 
         {/* Menú Principal */}
         {!showPlayerForm && !gameState && !showHistory && (
-          <div className="main-menu">
-            <button 
-              className="menu-button play-button"
-              onClick={handlePlayNow}
-            >
-              <span className="button-icon">🎮</span>
-              <span className="button-text">JUEGA YA</span>
-            </button>
-            
-            <button 
-              className="menu-button history-button"
-              onClick={handleHistory}
-            >
-              <span className="button-icon">📊</span>
-              <span className="button-text">HISTORIAL</span>
-            </button>
-          </div>
+          <MainMenu 
+            onPlayNow={handlePlayNow}
+            onShowHistory={handleHistory}
+          />
         )}
 
         {/* Formulario de Jugadores */}
         {showPlayerForm && !gameState && (
-          <div className="player-form">
-            <div className="form-container">
-              <h2 className="form-title">Nombres de Jugadores</h2>
-              
-              <div className="input-group">
-                <label className="input-label">Jugador 1</label>
-                <input
-                  type="text"
-                  className="player-input"
-                  placeholder="Ingrese su nombre"
-                  value={player1Name}
-                  onChange={(e) => setPlayer1Name(e.target.value)}
-                  maxLength={20}
-                />
-              </div>
-
-              <div className="input-group">
-                <label className="input-label">Jugador 2</label>
-                <input
-                  type="text"
-                  className="player-input"
-                  placeholder="Ingrese su nombre"
-                  value={player2Name}
-                  onChange={(e) => setPlayer2Name(e.target.value)}
-                  maxLength={20}
-                />
-              </div>
-
-              <div className="form-buttons">
-                <button 
-                  className="menu-button back-button"
-                  onClick={handleBackToMenu}
-                >
-                  <span className="button-icon">⬅️</span>
-                  <span className="button-text">VOLVER</span>
-                </button>
-
-                <button 
-                  className="menu-button start-game-button"
-                  onClick={handleStartGame}
-                  disabled={!player1Name.trim() || !player2Name.trim() || isLoading}
-                >
-                  <span className="button-icon">🚀</span>
-                  <span className="button-text">{isLoading ? "INICIANDO..." : "COMENZAR"}</span>
-                </button>
-              </div>
-            </div>
-          </div>
+          <PlayerForm 
+            player1Name={player1Name}
+            player2Name={player2Name}
+            setPlayer1Name={setPlayer1Name}
+            setPlayer2Name={setPlayer2Name}
+            onStartGame={handleStartGame}
+            onBackToMenu={handleBackToMenu}
+            isLoading={isLoading}
+          />
         )}
 
         {/* Pantalla de Historial */}
         {showHistory && (
-          <div className="history-screen">
-            <div className="history-container">
-              <h2 className="history-title">📊 Historial de Partidas</h2>
-              
-              {gameHistory.length === 0 ? (
-                <div className="no-history">
-                  <p>No hay partidas registradas aún.</p>
-                  <p>¡Juega tu primera partida para ver el historial!</p>
-                </div>
-              ) : (
-                <div className="history-list">
-                  <div className="history-stats">
-                    <p>Total de partidas jugadas: <strong>{gameHistory.length}</strong></p>
-                  </div>
-                  
-                  {gameHistory.map((game) => (
-                    <div key={game.id} className="history-item">
-                      <div className="history-header">
-                        <div className="game-date">
-                          <span className="date-label">Fecha:</span>
-                          <span className="date-value">{game.dateFormatted}</span>
-                        </div>
-                        <div className="game-duration">
-                          <span className="duration-label">Duración total:</span>
-                          <span className="duration-value">{game.totalGameTimeFormatted}</span>
-                        </div>
-                      </div>
-                      
-                      <div className="game-result">
-                        {game.isRealTie ? (
-                          <div className="result-tie">🤝 Empate Perfecto</div>
-                        ) : game.winner === 'Empate' ? (
-                          <div className="result-tie">🤝 Empate</div>
-                        ) : (
-                          <div className="result-winner">🏆 Ganador: <strong>{game.winner}</strong></div>
-                        )}
-                      </div>
-                      
-                      <div className="players-summary-hist">
-                        {game.playersSummary && game.playersSummary.map((player, index) => (
-                          <div key={index} className={`player-hist-card ${game.winner === player.name ? 'winner-hist' : ''}`}>
-                            <div className="player-hist-name">
-                              {player.name} {game.winner === player.name ? '👑' : ''}
-                            </div>
-                            <div className="player-hist-stats">
-                              <div className="hist-stat">
-                                <span className="hist-stat-label">Intentos:</span>
-                                <span className="hist-stat-value">{player.totalAttempts}</span>
-                              </div>
-                              <div className="hist-stat">
-                                <span className="hist-stat-label">Tiempo:</span>
-                                <span className="hist-stat-value">{player.totalTimeFormatted}</span>
-                              </div>
-                            </div>
-                            <div className="rounds-hist">
-                              <span className="rounds-hist-label">Por ronda:</span>
-                              <div className="rounds-hist-list">
-                                {player.roundsPlayed && player.roundsPlayed.map((round, roundIndex) => (
-                                  <span key={roundIndex} className="round-hist-item">
-                                    R{round.round}: {round.attempts}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-              
-              <div className="history-buttons">
-                <button 
-                  className="menu-button back-button"
-                  onClick={handleBackToMenu}
-                >
-                  <span className="button-icon">🏠</span>
-                  <span className="button-text">MENÚ PRINCIPAL</span>
-                </button>
-                
-                <button 
-                  className="menu-button play-button"
-                  onClick={() => {
-                    setShowHistory(false);
-                    setShowPlayerForm(true);
-                  }}
-                >
-                  <span className="button-icon">🎮</span>
-                  <span className="button-text">NUEVA PARTIDA</span>
-                </button>
-              </div>
-            </div>
-          </div>
+          <HistoryScreen 
+            gameHistory={gameHistory}
+            onBackToMenu={handleBackToMenu}
+            onNewGame={() => {
+              setShowHistory(false);
+              setShowPlayerForm(true);
+            }}
+          />
         )}
 
         {/* Interfaz del Juego */}
         {gameState && gameState.status === 'playing' && (
-          <div className="game-interface">
-            <div className="game-container">
-              <div className="game-info">
-                <div className="players-info">
-                  <div className={`player-card ${gameState.activePlayer === 0 ? 'active' : ''}`}>
-                    <span className="player-name">{gameState.players[0]}</span>
-                    <span className="player-score">{(gameState.currentScores && gameState.currentScores[0]) || 0} intentos</span>
-                  </div>
-                  <div className={`player-card ${gameState.activePlayer === 1 ? 'active' : ''}`}>
-                    <span className="player-name">{gameState.players[1]}</span>
-                    <span className="player-score">{(gameState.currentScores && gameState.currentScores[1]) || 0} intentos</span>
-                  </div>
-                </div>
-                
-                <div className="round-info">
-                  <span>Ronda {gameState.currentRound} de 6</span>
-                </div>
-              </div>
-
-              <div className="guess-section">
-                <h3 className="guess-title">Adivina el número (1-100)</h3>
-                <p className="current-player">Turno de: <strong>{gameState.activePlayerName}</strong></p>
-                
-                <div className="guess-input-group">
-                  <input
-                    type="number"
-                    className="guess-input"
-                    placeholder="Ingresa tu número"
-                    value={currentGuess}
-                    onChange={(e) => setCurrentGuess(e.target.value)}
-                    min="1"
-                    max="100"
-                    disabled={isLoading}
-                  />
-                  <button 
-                    className="guess-button"
-                    onClick={handleGuess}
-                    disabled={isLoading || !currentGuess.trim()}
-                  >
-                    {isLoading ? "..." : "ADIVINAR"}
-                  </button>
-                </div>
-
-                {gameResult && (
-                  <div className="game-result">
-                    <p>{gameResult}</p>
-                  </div>
-                )}
-              </div>
-
-              <div className="attempts-section">
-                <h4>Intentos de esta ronda:</h4>
-                <div className="attempts-list">
-                  {gameState.attempts && gameState.attempts.map((attempt, index) => (
-                    <span key={index} className="attempt-item">
-                      {attempt.number}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <button 
-                className="menu-button back-button"
-                onClick={handleBackToMenu}
-              >
-                <span className="button-icon">🏠</span>
-                <span className="button-text">VOLVER AL MENÚ</span>
-              </button>
-            </div>
-          </div>
+          <GameInterface 
+            gameState={gameState}
+            currentGuess={currentGuess}
+            setCurrentGuess={setCurrentGuess}
+            onGuess={handleGuess}
+            onBackToMenu={handleBackToMenu}
+            gameResult={gameResult}
+            isLoading={isLoading}
+          />
         )}
 
         {/* Pantalla de Resultados Finales */}
         {gameState && gameState.status === 'finished' && (
-          <div className="final-results">
-            <div className="results-container">
-              <h2 className="results-title">🏆 Resultados Finales</h2>
-              
-              <div className="winner-announcement">
-                {gameState.isRealTie ? (
-                  <p className="tie-message">¡Empate Perfecto! 🤝</p>
-                ) : gameState.winner === 'Empate' ? (
-                  <p className="tie-message">¡Es un empate! 🤝</p>
-                ) : (
-                  <p className="winner-message">¡Ganador: <strong>{gameState.winner}</strong>! 🎉</p>
-                )}
-              </div>
-
-              {/* Resumen Completo en un Solo Recuadro */}
-              <div className="game-summary">
-                <h3>📊 Resumen de la Partida</h3>
-                
-                {gameState.playersSummary && gameState.playersSummary.map((player, index) => (
-                  <div key={index} className={`player-summary ${gameState.winner === player.name ? 'winner-summary' : ''}`}>
-                    <div className="player-name-section">
-                      <h4>{player.name} {gameState.winner === player.name ? '👑' : ''}</h4>
-                    </div>
-                    
-                    <div className="player-details">
-                      <div className="summary-stat">
-                        <span className="stat-label">Total de intentos:</span>
-                        <span className="stat-value">{player.totalAttempts}</span>
-                      </div>
-                      <div className="summary-stat">
-                        <span className="stat-label">Tiempo total:</span>
-                        <span className="stat-value">{player.totalTimeFormatted}</span>
-                      </div>
-                    </div>
-
-                    {/* Intentos por Ronda */}
-                    <div className="rounds-breakdown">
-                      <span className="breakdown-title">Intentos por ronda:</span>
-                      <div className="rounds-list">
-                        {player.roundsPlayed && player.roundsPlayed.map((round, roundIndex) => (
-                          <span key={roundIndex} className="round-attempt">
-                            R{round.round}: {round.attempts}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="form-buttons">
-                <button 
-                  className="menu-button start-game-button"
-                  onClick={handleNewGame}
-                >
-                  <span className="button-icon">🎮</span>
-                  <span className="button-text">NUEVA PARTIDA</span>
-                </button>
-
-                <button 
-                  className="menu-button back-button"
-                  onClick={handleBackToMenu}
-                >
-                  <span className="button-icon">🏠</span>
-                  <span className="button-text">MENÚ PRINCIPAL</span>
-                </button>
-              </div>
-            </div>
-          </div>
+          <FinalResults 
+            gameState={gameState}
+            onNewGame={handleNewGame}
+            onBackToMenu={handleBackToMenu}
+          />
         )}
 
         {/* Pantalla de debug/fallback cuando gameState existe pero no está en 'playing' ni 'finished' */}

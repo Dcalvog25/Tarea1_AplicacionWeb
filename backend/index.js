@@ -8,7 +8,7 @@ const PORT = 5000;
 app.use(cors());
 app.use(express.json());
 
-// Estado del juego en memoria (en producción usarías una base de datos)
+// Estado del juego en memoria 
 let gameState = null;
 
 // Archivo para guardar el historial
@@ -331,7 +331,7 @@ app.get("/api/game/history", (req, res) => {
   }
 });
 
-// Limpiar historial (opcional para desarrollo)
+// Limpiar historial 
 app.delete("/api/game/history", (req, res) => {
   try {
     fs.writeFileSync(HISTORY_FILE, JSON.stringify([], null, 2));

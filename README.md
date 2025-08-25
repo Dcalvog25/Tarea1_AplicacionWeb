@@ -66,3 +66,6 @@ npm run dev
 ```
 
 La aplicación estará disponible en `http://localhost:5173` (frontend) comunicándose con `http://localhost:5000` (backend).
+
+### Video Demostrativo
+Puede acceder al video demostrativo disponible en el siguiente link `https://drive.google.com/file/d/11ij8nTqq8rCsGwcm3NSeyitWhsdaDCSJ/view?usp=sharing`

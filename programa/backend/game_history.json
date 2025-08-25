@@ -1,5 +1,58 @@
 [
   {
+    "id": 1756096636172,
+    "date": "2025-08-25T04:37:16.172Z",
+    "dateFormatted": "24/8/2025, 22:37:16",
+    "players": [
+      "DAVID",
+      "PROFE"
+    ],
+    "winner": "PROFE",
+    "isRealTie": false,
+    "totalGameTime": 141262,
+    "totalGameTimeFormatted": "2m 21s",
+    "playersSummary": [
+      {
+        "name": "DAVID",
+        "totalAttempts": 19,
+        "totalTimeFormatted": "1m 26s",
+        "roundsPlayed": [
+          {
+            "round": 1,
+            "attempts": 7
+          },
+          {
+            "round": 3,
+            "attempts": 6
+          },
+          {
+            "round": 5,
+            "attempts": 6
+          }
+        ]
+      },
+      {
+        "name": "PROFE",
+        "totalAttempts": 17,
+        "totalTimeFormatted": "54s",
+        "roundsPlayed": [
+          {
+            "round": 2,
+            "attempts": 6
+          },
+          {
+            "round": 4,
+            "attempts": 7
+          },
+          {
+            "round": 6,
+            "attempts": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": 1756094117446,
     "date": "2025-08-25T03:55:17.446Z",
     "dateFormatted": "24/8/2025, 21:55:17",

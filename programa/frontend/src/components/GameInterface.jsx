@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react';
+
 /**
  * Componente principal de la interfaz durante el juego activo
- * Mostrar el estado actual del juego y permitir a los jugadores hacer intentos
- * Centraliza toda la interacción durante las rondas de juego
+ * PROPÓSITO: Mostrar el estado actual del juego y permitir a los jugadores hacer intentos
+ * RAZÓN: Centraliza toda la interacción durante las rondas de juego
  */
 function GameInterface({ 
   gameState, 
@@ -12,10 +14,41 @@ function GameInterface({
   gameResult, 
   isLoading 
 }) {
+  // Estado para el temporizador de la ronda actual
+  const [currentTimer, setCurrentTimer] = useState(0);
+
+  /**
+   * Temporizador en tiempo real para la ronda actual
+   * PROPÓSITO: Mostrar al jugador cuánto tiempo lleva en su turno actual
+   * RAZÓN: Los jugadores quieren saber el tiempo que están tomando para tomar decisiones
+   */
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTimer(prev => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Reiniciar temporizador cuando cambia de ronda o jugador
+  useEffect(() => {
+    setCurrentTimer(0);
+  }, [gameState.currentRound, gameState.activePlayer]);
+
+  /**
+   * Formatea segundos a formato MM:SS
+   * PROPÓSITO: Mostrar el tiempo de forma legible
+   */
+  const formatTimer = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
   /**
    * Procesa el intento del jugador actual
-   * Validar y enviar el número ingresado al componente padre
-   * Mantiene la lógica de validación cerca de la interfaz de entrada
+   * PROPÓSITO: Validar y enviar el número ingresado al componente padre
+   * RAZÓN: Mantiene la lógica de validación cerca de la interfaz de entrada
    */
   const handleGuess = () => {
     onGuess();
@@ -42,12 +75,17 @@ function GameInterface({
           </div>
           
           {/* 
-            INDICADOR DE PROGRESO DE RONDA
-            Mostrar en qué ronda están del total de 6
-            Los jugadores necesitan saber cuánto falta para terminar el juego
+            INDICADOR DE PROGRESO DE RONDA Y TEMPORIZADOR
+            PROPÓSITO: Mostrar en qué ronda están y el tiempo transcurrido del turno actual
+            RAZÓN: Los jugadores necesitan saber cuánto falta para terminar y cuánto tiempo llevan
           */}
           <div className="round-info">
-            <span>Ronda {gameState.currentRound} de 6</span>
+            <div className="round-progress">
+              <span>Ronda {gameState.currentRound} de 6</span>
+            </div>
+            <div className="current-timer">
+              <span>⏱️ Tiempo del turno: {formatTimer(currentTimer)}</span>
+            </div>
           </div>
         </div>
 

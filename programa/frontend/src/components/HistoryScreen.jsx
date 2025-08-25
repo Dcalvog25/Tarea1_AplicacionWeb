@@ -1,93 +1,71 @@
+/**
+ * Componente para mostrar el historial de partidas
+ * PROPÓSITO: Mostrar de manera simple el historial de juegos anteriores
+ * RAZÓN: Los jugadores quieren revisar sus partidas pasadas sin complicaciones visuales
+ */
 function HistoryScreen({ gameHistory, onBackToMenu, onNewGame }) {
   return (
     <div className="history-screen">
-      <div className="history-container">
-        <h2 className="history-title">📊 Historial de Partidas</h2>
+      <div className="simple-container">
+        <h2>📊 Historial</h2>
         
         {gameHistory.length === 0 ? (
           <div className="no-history">
-            <p>No hay partidas registradas aún.</p>
-            <p>¡Juega tu primera partida para ver el historial!</p>
+            <p>No hay partidas registradas.</p>
+            <p>¡Juega tu primera partida!</p>
           </div>
         ) : (
-          <div className="history-list">
-            <div className="history-stats">
-              <p>Total de partidas jugadas: <strong>{gameHistory.length}</strong></p>
-            </div>
+          <div className="simple-history">
+            <p>Total de partidas: <strong>{gameHistory.length}</strong></p>
             
-            {gameHistory.map((game) => (
-              <div key={game.id} className="history-item">
-                <div className="history-header">
-                  <div className="game-date">
-                    <span className="date-label">Fecha:</span>
-                    <span className="date-value">{game.dateFormatted}</span>
+            {/* Lista simple de partidas */}
+            <div className="history-list">
+              {gameHistory.map((game) => (
+                <div key={game.id} className="history-item">
+                  <div className="game-info">
+                    <span className="game-date">{game.dateFormatted}</span>
+                    <span className="game-duration">{game.totalGameTimeFormatted}</span>
                   </div>
-                  <div className="game-duration">
-                    <span className="duration-label">Duración total:</span>
-                    <span className="duration-value">{game.totalGameTimeFormatted}</span>
+                  
+                  <div className="game-result">
+                    {game.isRealTie ? (
+                      <span>🤝 Empate Perfecto</span>
+                    ) : game.winner === 'Empate' ? (
+                      <span>🤝 Empate</span>
+                    ) : (
+                      <span>🏆 {game.winner}</span>
+                    )}
                   </div>
+                  
+                  {/* Tabla simple de jugadores */}
+                  <table className="players-table">
+                    <thead>
+                      <tr>
+                        <th>Jugador</th>
+                        <th>Intentos</th>
+                        <th>Tiempo</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {game.playersSummary && game.playersSummary.map((player, index) => (
+                        <tr key={index} className={game.winner === player.name ? 'winner-row' : ''}>
+                          <td>{player.name} {game.winner === player.name ? '👑' : ''}</td>
+                          <td>{player.totalAttempts}</td>
+                          <td>{player.totalTimeFormatted}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-                
-                <div className="game-result">
-                  {game.isRealTie ? (
-                    <div className="result-tie">🤝 Empate Perfecto</div>
-                  ) : game.winner === 'Empate' ? (
-                    <div className="result-tie">🤝 Empate</div>
-                  ) : (
-                    <div className="result-winner">🏆 Ganador: <strong>{game.winner}</strong></div>
-                  )}
-                </div>
-                
-                <div className="players-summary-hist">
-                  {game.playersSummary && game.playersSummary.map((player, index) => (
-                    <div key={index} className={`player-hist-card ${game.winner === player.name ? 'winner-hist' : ''}`}>
-                      <div className="player-hist-name">
-                        {player.name} {game.winner === player.name ? '👑' : ''}
-                      </div>
-                      <div className="player-hist-stats">
-                        <div className="hist-stat">
-                          <span className="hist-stat-label">Intentos:</span>
-                          <span className="hist-stat-value">{player.totalAttempts}</span>
-                        </div>
-                        <div className="hist-stat">
-                          <span className="hist-stat-label">Tiempo:</span>
-                          <span className="hist-stat-value">{player.totalTimeFormatted}</span>
-                        </div>
-                      </div>
-                      <div className="rounds-hist">
-                        <span className="rounds-hist-label">Por ronda:</span>
-                        <div className="rounds-hist-list">
-                          {player.roundsPlayed && player.roundsPlayed.map((round, roundIndex) => (
-                            <span key={roundIndex} className="round-hist-item">
-                              R{round.round}: {round.attempts}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         )}
         
-        <div className="history-buttons">
-          <button 
-            className="menu-button back-button"
-            onClick={onBackToMenu}
-          >
-            <span className="button-icon">🏠</span>
-            <span className="button-text">MENÚ PRINCIPAL</span>
-          </button>
-          
-          <button 
-            className="menu-button play-button"
-            onClick={onNewGame}
-          >
-            <span className="button-icon">🎮</span>
-            <span className="button-text">NUEVA PARTIDA</span>
-          </button>
+        {/* Botones simples */}
+        <div className="simple-buttons">
+          <button onClick={onBackToMenu}>🏠 Menú Principal</button>
+          <button onClick={onNewGame}>🎮 Nueva Partida</button>
         </div>
       </div>
     </div>
